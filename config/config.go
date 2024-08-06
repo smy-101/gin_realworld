@@ -7,9 +7,7 @@ import (
 )
 
 type config struct {
-	Secret             string
-	PublicKeyLocation  string
-	PrivateKeyLocation string
+	Secret string
 }
 
 var _config config
