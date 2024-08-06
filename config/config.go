@@ -32,3 +32,11 @@ func init() {
 func GetSecret() string {
 	return _config.Secret
 }
+
+func GetPrivateKeyLocation() string {
+	return _config.PrivateKeyLocation
+}
+
+func GetPublicKeyLocation() string {
+	return _config.PublicKeyLocation
+}

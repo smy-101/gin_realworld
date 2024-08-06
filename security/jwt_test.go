@@ -3,9 +3,10 @@ package security
 import "testing"
 
 func TestGenerateJWT(t *testing.T) {
-	token, error := generateJWT("jack", "jack@gamil.com")
-	if error != nil {
-		t.Errorf("Error while generating")
+	token, err := GenerateJWT("jack", "jack@gmail.com")
+	if err != nil {
+		t.Error(err)
+		return
 	}
-	t.Logf("Token: %s", token)
+	t.Logf("token: %v\n", token)
 }

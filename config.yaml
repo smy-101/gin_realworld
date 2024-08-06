@@ -1,1 +1,3 @@
 secret: secret111222
+privateKeyLocation: /home/smy-101/workspace/gin-realword/private.pem
+publicKeyLocation: /home/smy-101/workspace/gin-realword/public.pem
