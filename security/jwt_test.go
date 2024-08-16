@@ -6,7 +6,7 @@ import (
 )
 
 func TestGenerateJWT(t *testing.T) {
-	token, error := generateJWT("jack", "jack@gamil.com")
+	token, error := GenerateJWT("jack", "jack@gamil.com")
 	if error != nil {
 		t.Errorf("Error while generating")
 	}

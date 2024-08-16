@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func generateJWT(username, email string) (string, error) {
+func GenerateJWT(username, email string) (string, error) {
 
 	key := []byte(config.GetSecret())
 	tokenDuration := 24 * time.Hour
