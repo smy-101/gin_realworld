@@ -4,6 +4,7 @@ import (
 	"gin_realworld/config"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -36,4 +37,16 @@ func VerifyJWT(token string) (*jwt.MapClaims, bool, error) {
 		return &claim, true, nil
 	}
 	return nil, false, nil
+}
+
+func GetCurrentUserName(ctx *gin.Context) string {
+	mapClaims := ctx.MustGet("user").(*jwt.MapClaims)
+	userName := (*mapClaims)["user"].(map[string]interface{})["username"].(string)
+	return userName
+}
+
+func GetCurrentUserEmail(ctx *gin.Context) string {
+	mapClaims := ctx.MustGet("user").(*jwt.MapClaims)
+	userName := (*mapClaims)["user"].(map[string]interface{})["email"].(string)
+	return userName
 }

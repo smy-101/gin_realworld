@@ -22,4 +22,13 @@ type UserAuthenticationBody struct {
 	Image    string `json:"image"`
 }
 
-//login
+type UserProfileResponse struct {
+	UserProfile UserProfile `json:"profile"`
+}
+
+type UserProfile struct {
+	Username  string `json:"username"`
+	Bio       string `json:"bio"`
+	Image     string `json:"imag"`
+	Following bool   `json:"following"`
+}
