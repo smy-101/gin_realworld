@@ -2,9 +2,11 @@ package handler
 
 import (
 	"gin_realworld/logger"
+	"gin_realworld/models"
 	"gin_realworld/params/request"
 	"gin_realworld/params/response"
 	"gin_realworld/security"
+	"gin_realworld/storage"
 	"gin_realworld/utils"
 	"net/http"
 
@@ -27,8 +29,20 @@ func userRegistration(ctx *gin.Context) {
 	}
 
 	log.WithField("user", utils.JsonMarshal(body)).Infof("user registration")
+	defaultImage := "https://api.realworld.io/images/smiley-cyrus.jpeg"
 
-	//TODO: insert user to db
+	//insert user to db
+	if err := storage.CreateUser(ctx, &models.User{
+		UserName: body.User.UserName,
+		Password: body.User.Password,
+		Email:    body.User.Email,
+		Image:    defaultImage,
+		Bio:      "",
+	}); err != nil {
+		log.WithError(err).Errorln("create user failed")
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 
 	token, err := security.GenerateJWT(body.User.UserName, body.User.Email)
 	if err != nil {
@@ -43,7 +57,7 @@ func userRegistration(ctx *gin.Context) {
 			Token:    token,
 			UserName: body.User.UserName,
 			Bio:      "",
-			Image:    "https://api.realworld.io/images/smiley-cyrus.jpeg",
+			Image:    defaultImage,
 		}})
 }
 
@@ -59,9 +73,17 @@ func userLogin(ctx *gin.Context) {
 	log.WithField("user", utils.JsonMarshal(body)).Infof("user login")
 
 	//TODO: get userName from db
-	userName := "jack"
+	dbUser, err := storage.GetUserByEmail(ctx, body.User.Email)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	if dbUser.Password != body.User.Password {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
-	token, err := security.GenerateJWT(userName, body.User.Email)
+	token, err := security.GenerateJWT(dbUser.UserName, body.User.Email)
 	if err != nil {
 		log.WithError(err).Errorln("generate jwt failed")
 		ctx.AbortWithStatus(http.StatusInternalServerError)
@@ -71,9 +93,9 @@ func userLogin(ctx *gin.Context) {
 		User: response.UserAuthenticationBody{
 			Email:    body.User.Email,
 			Token:    token,
-			UserName: userName,
-			Bio:      "",
-			Image:    "https://api.realworld.io/images/smiley-cyrus.jpeg",
+			UserName: dbUser.UserName,
+			Bio:      dbUser.Bio,
+			Image:    dbUser.Image,
 		}})
 
 }
