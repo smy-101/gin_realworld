@@ -2,7 +2,10 @@
   "cSpell.words": [
     "Errorln",
     "gonic",
+    "gorm",
     "Infof",
-    "realworld"
+    "jmoiron",
+    "realworld",
+    "sqlx"
   ]
 }
