@@ -11,6 +11,7 @@ func RunHttpServer() {
 	r := gin.Default()
 	handler.AddUserHandler(r)
 	handler.AddArticleHandler(r)
+	handler.AddTagsHandler(r)
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
