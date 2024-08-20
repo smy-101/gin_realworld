@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"gin_realworld/models"
+	"gin_realworld/utils"
 	"testing"
 	"time"
 )
@@ -63,4 +64,13 @@ func TestDataImport(t *testing.T) {
 			t.Errorf("crate article failed")
 		}
 	}
+}
+
+func TestListArticles(t *testing.T) {
+	ctx := context.TODO()
+	articles, err := ListArticles(ctx, 10, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("articles:%v\n", utils.JsonMarshal(articles))
 }

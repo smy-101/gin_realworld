@@ -1,6 +1,7 @@
 package server
 
 import (
+	"gin_realworld/handler"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,6 +9,8 @@ import (
 
 func RunHttpServer() {
 	r := gin.Default()
+	handler.AddUserHandler(r)
+	handler.AddArticleHandler(r)
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",

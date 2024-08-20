@@ -20,6 +20,10 @@ type Article struct {
 	TagList        TagList `gorm:"type:string"`
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
+
+	AuthorUserEmail string `gorm:"->"`
+	AuthorUserImage string `gorm:"->"`
+	AuthorUserBio   string `gorm:"->"`
 }
 
 func (a Article) TableName() string {
