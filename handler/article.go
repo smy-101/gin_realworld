@@ -2,12 +2,13 @@ package handler
 
 import (
 	"gin_realworld/logger"
+	"gin_realworld/params/request"
 	"gin_realworld/params/response"
 	"gin_realworld/storage"
+	"gin_realworld/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/cast"
 )
 
 func AddArticleHandler(r *gin.Engine) {
@@ -17,15 +18,20 @@ func AddArticleHandler(r *gin.Engine) {
 
 func listArticles(ctx *gin.Context) {
 	log := logger.New(ctx)
-	limit, offset := cast.ToInt(ctx.Query("limit")), cast.ToInt(ctx.Query("offset"))
-	log.Infof("list articles limit:%d offset:%d", limit, offset)
+	// limit, offset := cast.ToInt(ctx.Query("limit")), cast.ToInt(ctx.Query("offset"))
+	var req request.ListArticleQuery
+	if err := ctx.BindQuery(&req); err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	log.Infof("list articles query: %v", utils.JsonMarshal(req))
 
-	articles, err := storage.ListArticles(ctx, limit, offset)
+	articles, err := storage.ListArticles(ctx, &req)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	total, err := storage.CountArticles(ctx)
+	total, err := storage.CountArticles(ctx, &req)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
