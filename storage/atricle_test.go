@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"gin_realworld/models"
+	"gin_realworld/params/request"
 	"gin_realworld/utils"
 	"testing"
 	"time"
@@ -68,7 +69,10 @@ func TestDataImport(t *testing.T) {
 
 func TestListArticles(t *testing.T) {
 	ctx := context.TODO()
-	articles, err := ListArticles(ctx, 10, 0)
+	articles, err := ListArticles(ctx, &request.ListArticleQuery{
+		Limit:  10,
+		Offset: 0,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
