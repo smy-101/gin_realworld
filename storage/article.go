@@ -24,7 +24,7 @@ func listArticleTx(ctx context.Context, req *request.ListArticleQuery) *gorm.DB 
 	tx := gormDb.WithContext(ctx).Model(models.Article{}).
 		Select("article.*, user.email as author_user_email, user.bio as author_user_bio, user.image as author_user_image").
 		Joins("LEFT JOIN user ON article.author_username = user.username").
-		Order("created_at desc").Offset(int(req.Offset)).Limit(int(req.Limit))
+		Order("created_at desc")
 
 	if req.Tag != "" {
 		tx = tx.Where("article.tag_list like ?", "%\""+req.Tag+"\"%")
@@ -36,7 +36,7 @@ func listArticleTx(ctx context.Context, req *request.ListArticleQuery) *gorm.DB 
 func ListArticles(ctx context.Context, req *request.ListArticleQuery) ([]models.Article, error) {
 	var articles []models.Article
 
-	err := listArticleTx(ctx, req).Find(&articles).Error
+	err := listArticleTx(ctx, req).Offset(int(req.Offset)).Limit(int(req.Limit)).Find(&articles).Error
 	if err != nil {
 		return nil, err
 	}
