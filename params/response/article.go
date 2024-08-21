@@ -11,20 +11,20 @@ type ListArticlesResponse struct {
 }
 
 type Article struct {
-	Author         *ArticleAuthor `json:"author"`
-	Title          string         `json:"title"`
-	Slug           string         `json:"slug"`
-	Body           string         `json:"body"`
-	Description    string         `json:"description"`
-	TagList        []string       `json:"tagList"`
-	Favorited      bool           `json:"favorited"`
-	FavoritesCount int            `json:"favoritesCount"`
-	CreatedAt      time.Time      `json:"createdAt"`
-	UpdatedAt      time.Time      `json:"updatedAt"`
+	Author         *Author   `json:"author"`
+	Title          string    `json:"title"`
+	Slug           string    `json:"slug"`
+	Body           string    `json:"body"`
+	Description    string    `json:"description"`
+	TagList        []string  `json:"tagList"`
+	Favorited      bool      `json:"favorited"`
+	FavoritesCount int       `json:"favoritesCount"`
+	CreatedAt      time.Time `json:"createdAt"`
+	UpdatedAt      time.Time `json:"updatedAt"`
 }
 
 func (a *Article) FromDB(dbArticle *models.Article) {
-	a.Author = &ArticleAuthor{
+	a.Author = &Author{
 		Bio:       dbArticle.AuthorUserBio,
 		Following: false,
 		Image:     dbArticle.AuthorUserImage,
@@ -41,7 +41,7 @@ func (a *Article) FromDB(dbArticle *models.Article) {
 	a.UpdatedAt = dbArticle.UpdatedAt
 }
 
-type ArticleAuthor struct {
+type Author struct {
 	Bio       string `json:"bio"`
 	Following bool   `json:"following"`
 	Image     string `json:"image"`
